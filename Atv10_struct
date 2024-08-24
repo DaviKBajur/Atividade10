@@ -1,0 +1,168 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define sucesso 0
+#define quant_notas 3
+
+typedef struct Aluno_s{
+    int matricula;
+    char nome[30];
+    char curso[30];
+    float altura;
+}Aluno_t;
+
+typedef struct Aluno2_s{
+    int matricula;
+    char nome[30];
+    char curso[30];
+    float altura;
+    int notas[quant_notas];
+    int media_notas;
+}Aluno2_t;
+
+void exercise1() {
+    Aluno_t* aluno;
+    aluno = (Aluno_t*)malloc(sizeof(Aluno_t));
+
+    printf("Diga os dados do aluno\n");
+    printf("Nome: ");
+    scanf("%29s", aluno->nome);
+    printf("Matricula: ");
+    scanf("%d", &aluno->matricula);
+    printf("Curso: ");
+    scanf("%29s", aluno->curso);
+    printf("Altura: ");
+    scanf("%f", &aluno->altura);
+
+    printf("\nOtimo!!\n\n");
+    printf("Esses sao os dados do aluno:\n");
+    printf("Nome: %s\n", aluno->nome);
+    printf("Matricula: %d\n", aluno->matricula);
+    printf("Curso: %s\n", aluno->curso);
+    printf("Altura: %.2f\n", aluno->altura);
+}
+
+void exercise2() {
+    Aluno2_t* aluno;
+    aluno = (Aluno2_t*)malloc(sizeof(Aluno2_t));
+
+    printf("Diga os dados do aluno\n");
+    printf("Nome: ");
+    scanf("%29s", aluno->nome);
+    printf("Matricula: ");
+    scanf("%d", &aluno->matricula);
+    printf("Curso: ");
+    scanf("%29s", aluno->curso);
+    printf("Altura: ");
+    scanf("%f", &aluno->altura);
+   
+   for(int i=0; i < quant_notas; i++){
+        printf("Nota %i: ", i+1);
+    scanf("%d", &aluno->notas[i]);
+   }
+
+    printf("\nOtimo!!\n\n");
+    printf("Esses sao os dados do aluno:\n");
+    printf("Nome: %s\n", aluno->nome);
+    printf("Matricula: %d\n", aluno->matricula);
+    printf("Curso: %s\n", aluno->curso);
+    printf("Altura: %.2f\n", aluno->altura);
+    
+    for(int i=0; i < quant_notas; i++){
+        printf("Nota %i: %d\n",i+1, aluno->notas[i]);
+        aluno->media_notas += aluno->notas[i];
+   }
+    
+    aluno->media_notas /= 3;
+    printf("A nota media do aluno e: %d\n", aluno->media_notas);
+}
+
+void exercise3() {
+    int numalunos = 0;
+    char continuar ='s';
+    Aluno2_t *alunos = NULL;
+    
+    while(continuar != 'n'){
+        
+        alunos = (Aluno2_t *)realloc(alunos,(numalunos+1) * sizeof(Aluno2_t));
+        
+         if (alunos == NULL) {
+            printf("Erro na alocacao de memoria\n");
+            return;
+        }
+            printf("Diga os dados do aluno %d:\n", numalunos + 1);
+            printf("Nome: ");
+            scanf("%29s", alunos[numalunos].nome);
+            printf("Matricula: ");
+            scanf("%d", &alunos[numalunos].matricula);
+            printf("Curso: ");
+            scanf("%29s", alunos[numalunos].curso);
+            printf("Altura: ");
+            scanf("%f", &alunos[numalunos].altura);
+            
+            for(int e=0; e < quant_notas; e++){
+                printf("Nota %d: ", e+1);
+                scanf("%d%*c", &alunos[numalunos].notas[e]);
+        }    
+
+            for(int e=0; e < quant_notas; e++){
+            printf("Nota %d: %d\n",e+1, alunos[numalunos].notas[e]);
+            alunos[numalunos].media_notas += alunos[numalunos].notas[e];
+        }
+    
+            alunos[numalunos].media_notas /= quant_notas;
+            
+            printf("deseja inserir mais um aluno? (s,n)\n");
+            scanf("%c", &continuar);
+            
+            if(continuar == 's'){
+                numalunos++;
+            }
+            
+    }
+
+    printf("\nDados coletados:\n");
+    printf("-------------------------------------------------------------------------------\n");
+    printf("| Nº |    Nome    | Matricula |    Curso    | Nota 1 | Nota 2 | Nota 3 | Média |\n");
+    printf("-------------------------------------------------------------------------------\n");
+    for (int i = 0; i <= numalunos; i++) {
+        printf("| %2d | %-10s | %10d | %-12s | %6d | %6d | %6d | %5d |\n",
+               i + 1, alunos[i].nome, alunos[i].matricula, alunos[i].curso,
+               alunos[i].notas[0], alunos[i].notas[1], alunos[i].notas[2], alunos[i].media_notas);
+    }
+    printf("-------------------------------------------------------------------------------\n");
+
+    free(alunos);
+}
+
+int main(int argc, char ** argv) {
+    int opcao;
+
+    do {
+        printf("Selecione uma opcao:\n");
+        printf("1. Exercicio 1\n");
+        printf("2. Exercicio 2\n");
+        printf("3. Exercicio 3\n");
+        printf("0. Sair\n");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1:
+                exercise1();
+                break;
+            case 2:
+                exercise2();
+                break;
+            case 3:
+                exercise3();
+                break;
+            case 0:
+                printf("Encerrando.\n");
+                break;
+            default:
+                printf("Opcao invalida. Tente novamente.\n");
+        }
+    } while (opcao != 0);
+
+    return sucesso;
+}
